@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as authService from "./authService";
 
 const API = "https://stage.api.sloovi.com";
 

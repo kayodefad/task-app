@@ -4,12 +4,16 @@ import Tasks from "./tasks";
 const Container = styled.div`
 	display: flex;
 	height: 100vh;
-    background: #fafafa;
+	background: #fafafa;
 `;
 const Sidebar = styled.div`
 	height: 100%;
 	background: #323e4d;
 	width: 230px;
+
+	@media (max-width: 576px) {
+		width: 0;
+	}
 `;
 const Main = styled.div`
 	display: flex;
@@ -22,9 +26,9 @@ const Header = styled.header`
 	box-shadow: 0 4px 20px -10px gray;
 `;
 const TasksContainer = styled.div`
-    flex: 1;
-    margin-top: 15vh;
-    margin-left: 20px;
+	flex: 1;
+	margin-top: 15vh;
+	margin-left: 20px;
 `;
 
 const Layout = () => {

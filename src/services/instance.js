@@ -8,7 +8,7 @@ const admin = axios.create({
 });
 
 admin.defaults.headers.post["Content-Type"] = "application/json";
-admin.defaults.headers["Access-Control-Allow-Origin"] = "*";
+admin.defaults.headers.post["Accept"] = "application/json";
 
 admin.interceptors.request.use(
 	(config) => {

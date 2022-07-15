@@ -235,8 +235,13 @@ const TaskForm = ({ setShowForm, setTaskForms, taskForms, activeTaskId }) => {
 	};
 
 	const handleDeleteTask = () => {
-		dispatch(deleteTask({ id: activeTaskId }));
-		closeForm();
+		const confirmDelete = window.confirm(
+			"Are you sure you want to delete this Task?"
+		);
+		if (confirmDelete) {
+			dispatch(deleteTask({ id: activeTaskId }));
+			closeForm();
+		}
 	};
 
 	return (

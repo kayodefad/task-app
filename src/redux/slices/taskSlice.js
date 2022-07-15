@@ -2,12 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import instance from "../../services/instance";
 
+const companyId = "company_413ef22b6237417fb1fba7917f0f69e7";
+const urlStart = "/task/lead_465c14d0e99e4972b6b21ffecf3dd691";
+
 export const getAllTasks = createAsyncThunk(
 	"task/getAllTasks",
 	async (fetch = true, { rejectWithValue }) => {
 		try {
 			const { data } = await instance.get(
-				"/task/lead_465c14d0e99e4972b6b21ffecf3dd691?company_id=company_413ef22b6237417fb1fba7917f0f69e7"
+				`${urlStart}?company_id=${companyId}`
 			);
 			return data.results;
 		} catch (error) {
@@ -26,7 +29,7 @@ export const getSingleTask = createAsyncThunk(
 	async (task, { rejectWithValue }) => {
 		try {
 			const { data } = await instance.get(
-				`/task/lead_465c14d0e99e4972b6b21ffecf3dd691/${task.id}?company_id=company_413ef22b6237417fb1fba7917f0f69e7`
+				`${urlStart}/${task.id}?company_id=${companyId}`
 			);
 			return data.results;
 		} catch (error) {
@@ -45,7 +48,7 @@ export const addTask = createAsyncThunk(
 	async (task, { rejectWithValue }) => {
 		try {
 			const { data } = await instance.post(
-				"/task/lead_465c14d0e99e4972b6b21ffecf3dd691?company_id=company_413ef22b6237417fb1fba7917f0f69e7",
+				`${urlStart}?company_id=${companyId}`,
 				task
 			);
 			toast.success("Task Added successfully");
@@ -66,7 +69,7 @@ export const updateTask = createAsyncThunk(
 	async (task, { rejectWithValue }) => {
 		try {
 			const { data } = await instance.put(
-				`/task/lead_465c14d0e99e4972b6b21ffecf3dd691/${task.id}?company_id=company_413ef22b6237417fb1fba7917f0f69e7`,
+				`${urlStart}/${task.id}?company_id=${companyId}`,
 				task.updatedTask
 			);
 			toast.success("Task Updated successfully");
@@ -86,9 +89,7 @@ export const deleteTask = createAsyncThunk(
 	"task/deleteTask",
 	async (task, { rejectWithValue }) => {
 		try {
-			await instance.delete(
-				`/task/lead_465c14d0e99e4972b6b21ffecf3dd691/${task.id}?company_id=company_413ef22b6237417fb1fba7917f0f69e7`
-			);
+			await instance.delete(`${urlStart}/${task.id}?company_id=${companyId}`);
 			toast.success("Task Deleted successfully");
 			return task.id;
 		} catch (error) {

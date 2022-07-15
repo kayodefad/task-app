@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import instance from "../../services/instance";
 
+const companyId = "company_413ef22b6237417fb1fba7917f0f69e7";
+
 export const loginUser = createAsyncThunk(
 	"user/loginUser",
 	async (loginDetails, { rejectWithValue }) => {
@@ -25,7 +27,7 @@ export const getUsers = createAsyncThunk(
 	async (fetch = true, { rejectWithValue }) => {
 		try {
 			const { data } = await instance.get(
-				"/team?product=outreach&company_id=company_413ef22b6237417fb1fba7917f0f69e7"
+				`/team?product=outreach&company_id=${companyId}`
 			);
 			return data.results.data;
 		} catch (error) {

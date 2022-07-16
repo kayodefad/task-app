@@ -17,6 +17,7 @@ const Container = styled.div`
 	padding: 10px;
 	background: #ecf7fc;
 	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
 
 	form {
 		display: flex;

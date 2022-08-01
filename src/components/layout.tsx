@@ -1,5 +1,9 @@
-import styled from "styled-components";
-import Tasks from "./tasks";
+import styled from 'styled-components';
+import Tasks from './tasks';
+
+import { toast } from 'react-toastify';
+import { useAppSelector } from '../redux/hooks';
+import { useEffect } from 'react';
 
 const Container = styled.div`
 	display: flex;
@@ -32,6 +36,21 @@ const TasksContainer = styled.div`
 `;
 
 const Layout = () => {
+	const { error: userError } = useAppSelector((state) => state.user);
+	const { error: taskError } = useAppSelector((state) => state.task);
+
+	useEffect(() => {
+		if (userError) {
+			toast.error(userError);
+		}
+	}, [userError]);
+
+	useEffect(() => {
+		if (taskError) {
+			toast.error(taskError);
+		}
+	}, [taskError]);
+
 	return (
 		<Container>
 			<Sidebar />

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import Layout from "./components/layout";
 import Loader from "./components/loader";

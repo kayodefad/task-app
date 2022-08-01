@@ -20,31 +20,18 @@ export type TaskModel = {
 
 type UpdateTaskModel = Omit<TaskModel, 'id'>;
 
-export const getAllTasks = createAsyncThunk(
-	'task/getAllTasks',
-	async (_, { rejectWithValue }) => {
-		try {
-			const { data } = await instance.get(
-				`${urlStart}?company_id=${companyId}`
-			);
-			return data.results;
-		} catch (error) {
-			return rejectWithValue(error);
-		}
-	}
-);
+export const getAllTasks = createAsyncThunk('task/getAllTasks', async () => {
+	const { data } = await instance.get(`${urlStart}?company_id=${companyId}`);
+	return data.results;
+});
 
 export const getSingleTask = createAsyncThunk(
 	'task/getSingleTask',
-	async (taskId: string, { rejectWithValue }) => {
-		try {
-			const { data } = await instance.get(
-				`${urlStart}/${taskId}?company_id=${companyId}`
-			);
-			return data.results;
-		} catch (error) {
-			return rejectWithValue(error);
-		}
+	async (taskId: string) => {
+		const { data } = await instance.get(
+			`${urlStart}/${taskId}?company_id=${companyId}`
+		);
+		return data.results;
 	}
 );
 
@@ -124,10 +111,11 @@ const taskSlice = createSlice({
 				(state, action: PayloadAction<TaskModel[]>) => {
 					state.tasks = action.payload;
 					state.loading = false;
+					state.error = ''
 				}
 			)
 			.addCase(getAllTasks.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			})
 			.addCase(addTask.pending, (state) => {
@@ -136,9 +124,10 @@ const taskSlice = createSlice({
 			.addCase(addTask.fulfilled, (state, action: PayloadAction<TaskModel>) => {
 				state.tasks.push(action.payload);
 				state.loading = false;
+				state.error = ''
 			})
 			.addCase(addTask.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			})
 			.addCase(getSingleTask.pending, (state) => {
@@ -149,10 +138,11 @@ const taskSlice = createSlice({
 				(state, action: PayloadAction<TaskModel>) => {
 					state.task = action.payload;
 					state.loading = false;
+					state.error = ''
 				}
 			)
 			.addCase(getSingleTask.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			})
 			.addCase(updateTask.pending, (state) => {
@@ -166,10 +156,11 @@ const taskSlice = createSlice({
 					);
 					state.tasks[existingTaskIndex] = action.payload;
 					state.loading = false;
+					state.error = ''
 				}
 			)
 			.addCase(updateTask.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			})
 			.addCase(deleteTask.pending, (state) => {
@@ -178,9 +169,10 @@ const taskSlice = createSlice({
 			.addCase(deleteTask.fulfilled, (state, action) => {
 				state.tasks = state.tasks.filter((task) => task.id !== action.payload);
 				state.loading = false;
+				state.error = ''
 			})
 			.addCase(deleteTask.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			});
 	},

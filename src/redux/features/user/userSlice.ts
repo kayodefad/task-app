@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import { toast } from 'react-toastify';
 import instance from '../../../services/instance';
 
 const companyId = 'company_413ef22b6237417fb1fba7917f0f69e7';
@@ -22,35 +21,19 @@ type LoggedInUser = {
 
 export const loginUser = createAsyncThunk(
 	'user/loginUser',
-	async (
-		loginDetails: { email: string; password: string },
-		{ rejectWithValue }
-	) => {
-		try {
-			const { data } = await instance.post('/login', loginDetails);
-			localStorage.setItem('user', JSON.stringify(data.results));
-			return data.results;
-		} catch (error) {
-			console.log(error)
-			return rejectWithValue(error);
-		}
+	async (loginDetails: { email: string; password: string }) => {
+		const { data } = await instance.post('/login', loginDetails);
+		localStorage.setItem('user', JSON.stringify(data.results));
+		return data.results;
 	}
 );
 
-export const getUsers = createAsyncThunk(
-	'user/getUsers',
-	async (_, { rejectWithValue }) => {
-		try {
-			const { data } = await instance.get(
-				`/team?product=outreach&company_id=${companyId}`
-			);
-			return data.results.data;
-		} catch (error) {
-			console.log(error)
-			return rejectWithValue(error);
-		}
-	}
-);
+export const getUsers = createAsyncThunk('user/getUsers', async () => {
+	const { data } = await instance.get(
+		`/team?product=outreach&company_id=${companyId}`
+	);
+	return data.results.data;
+});
 
 type UserState = {
 	user: LoggedInUser | null;
@@ -78,9 +61,10 @@ const userSlice = createSlice({
 			.addCase(loginUser.fulfilled, (state, action) => {
 				state.user = action.payload;
 				state.loading = false;
+				state.error = '';
 			})
 			.addCase(loginUser.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			})
 			.addCase(getUsers.pending, (state) => {
@@ -89,9 +73,10 @@ const userSlice = createSlice({
 			.addCase(getUsers.fulfilled, (state, action) => {
 				state.users = action.payload;
 				state.loading = false;
+				state.error = '';
 			})
 			.addCase(getUsers.rejected, (state, action) => {
-				state.error = 'An error occurred';
+				state.error = action.error.message || 'An error occurred';
 				state.loading = false;
 			});
 	},
